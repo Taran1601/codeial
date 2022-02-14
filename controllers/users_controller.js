@@ -44,4 +44,5 @@ else{
 }
 module.exports.createSession=function(req,res){
     //TODO later
+    return res.redirect('/');
 }
