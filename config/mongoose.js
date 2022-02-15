@@ -9,3 +9,4 @@ db.on('error',console.error.bind(console,"Error connecting to mongodb"));
 db.once('open',function(){
 console.log('connected to DataBae :: MongoDB');
 });
+module.exports=db;
