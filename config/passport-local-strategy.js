@@ -37,7 +37,7 @@ done(null,user.id);
 passport.deserializeUser(function(id,done){
     User.findById(id,function(err,user){
         if(err){
-            console.og('error in finding user from passport');
+            console.log('error in finding user from passport');
             return done(err);
         }
         return done(null,user);
@@ -52,9 +52,11 @@ passport.checkAuthentication=function(req,res,next){
     //if the user is not signed in
     return res.redirect('/users/sign-in');
 }
+//set the user for the views
 passport.setAuthenticatedUser=function(req,res,next){
     if(req.isAuthenticated()){
-        //req.user contains the current signed in user from the session cookie and we are just sending this to the locals for the views
+ //req.user contains the current signed in user from the session cookie and we are just sending this to the locals for the views
+ //req.user is handled by passport
         res.locals.user=req.user;
 
     }
