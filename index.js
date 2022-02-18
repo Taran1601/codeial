@@ -10,11 +10,11 @@ const passport=require('passport');
 const passportLocal=require('./config/passport-local-strategy');
 
   const MongoStore=require('connect-mongo')(session);
-  const sassMiddleware=require('node-sass-middlesware');
+  const sassMiddleware=require('node-sass-middleware');
 
   app.use(sassMiddleware({
-src:'/assets/scss',
-dest:'/assets/css',
+src:'./assets/scss',
+dest:'./assets/css',
 debug:true,
 outputStyle:'extended',
 //where should the server look out for css files
