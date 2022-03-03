@@ -62,10 +62,12 @@ else{
 
 }
 module.exports.createSession=function(req,res){
+    req.flash('success','Logged in Successfully');
     //TODO later
     return res.redirect('/');
 }
 module.exports.destroySession=function(req,res){
     req.logout();
+    req.flash('success','you have logged out!');
     return res.redirect('/');
 }
