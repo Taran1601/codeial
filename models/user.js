@@ -31,9 +31,13 @@ let storage=multer.diskStorage({
         cb(null,path.join(__dirname,'..',AVATAR_PATH));
     },
     filename:function(req,file,cb){
-        cb(null,file.fieldname+'-'+Date.now())
+        //fieldname is the avatar
+        cb(null,file.fieldname+'-'+Date.now());
     }
-})
-
+});
+//static methods
+userSchema.statics.uploadedAvatar=multer({storage:storage}).single('avatar');
+//to access avatar's path publically to the user(AVATAR_PATH)
+userSchema.statics.avatarPath=AVATAR_PATH;
 const User=mongoose.model('User',userSchema);
 module.exports=User;
