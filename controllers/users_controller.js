@@ -1,4 +1,6 @@
 const User=require('../models/user');
+const fs=require('fs');
+const path=require('path');
 module.exports.profile=function(req,res){
     User.findById(req.params.id,function(err,user){
         return res.render('user_profile',{
@@ -27,6 +29,9 @@ if(err){
 user.name=req.body.name;
 user.email=req.body.email;
 if(req.file){
+    if(user.avatar){
+fs.unlinkSync(path.join,_(_dirname,'..'.user.avatar));
+    }
     //this is saving the path of the uploaded file into the avatar field in the user schema
     user.avatar=User.avatarPath+'/'+ req.file.filename;
 }
