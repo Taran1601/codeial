@@ -1,64 +1,77 @@
-const Comment=require('../models/comment');
 const Post=require('../models/post');
+const Comment = require('../models/comment');
 module.exports.create= async function(req,res){
-//     Post.findById(req.body.post,function(err,post){
-//         if(post){
-//             Comment.create({
-//                 content:req.body.content,
-//                 post:req.body.post,
-//                 user:req.user._id
-//             },function(err,comment){
-//                 post.comments.push(comment);
-//                 post.save();
-//                 res.redirect('/');
-//             });
-//         }
-//     });
-try{
-    let post= await Post.findById(req.body.post);
-            if(post){
-            let comment=await Comment.create({
-                content:req.body.content,
-                post:req.body.post,
-                user:req.user._id
-            });
-                post.comments.push(comment);
-                post.save();
-                res.redirect('/');
-        }
-}
-catch(err){
-console.log('Error',err);
-}
-}
-module.exports.destroy= async function(req,res){
-    // Comment.findById(req.params.id,function(err,comment){
-    //     if(comment.user==req.user.id){
-    //         let postId=comment.post;
-    //         comment.remove();
-    //         Post.findByIdAndUpdate(postId,{$pull:{comments:req.params.id}},function(err,post){
-    //             return res.redirect('back');
-    //         });
+    // Post.create({
+    //    content:req.body.content,
+    //     user:req.user._id
+    // },function(err,post){
+    //     if(err){
+    //         console.log('error in creating a post');
     //     }
-    //     else{
-    //         return res.redirect('back');
-    //     }
-    // })
+    //     return res.redirect('back');
+    // });
     try{
-      let comment= await Comment.findById(req.params.id);
-        if(comment.user==req.user.id){
-            let postId=comment.post;
-            comment.remove();
-            Post.findByIdAndUpdate(postId,{$pull:{comments:req.params.id}},function(err,post){
-                return res.redirect('back');
-            });
+        let post=await Post.create({
+          content:req.body.content,
+          user:req.user._id
+        });
+        
+        if(req.xhr){
+            return res.status(200).json({
+                data:{
+                    post:post
+                },
+                message:"Post Created"
+            })
         }
-        else{
+
+        req.flash('success','Post Published!');
+        return res.redirect('back');
+    }catch(err){
+        // console.log('Error',err);
+        req.flash('error',err);
+        return;
+    }
+    
+
+}
+
+module.exports.destroy=async function(req,res){
+    // Post.findById(req.params.id,function(err,post){
+    //  //automatic coversion of id into string -> .id
+    //  if(post.user == req.user.id ){
+    //        post.remove();
+    //        Comment.deleteMany({
+    //            post:req.params.id
+    //        },function(err){
+    //          return res.redirect('back');
+    //        });
+    //  }else{
+    //      res.redirect('back');
+    //  }
+    // });
+    try{
+        let post=await Post.findById(req.params.id);
+        if(post.user == req.user.id ){
+            post.remove();
+            await Comment.deleteMany({post:req.params.id});
+            if(req.xhr){
+                return res.status(200).json({
+                    data:{
+                        post_id:req.params.id
+                    },
+                    message:"Post Deleted"
+                })
+            }
+            req.flash('success','Post and associated comments deleted!');
+            return res.redirect('back');
+        }else{
+            req.flash('error','You cannot delete this post!');
             return res.redirect('back');
         }
-    }
-    catch(err){
-console.log('Error',err);
-return;
+    }catch(err){
+//    console.log('Error',err);
+        req.flash('error',err);
+        return;
     }
 }
