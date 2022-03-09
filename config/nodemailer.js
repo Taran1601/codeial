@@ -10,12 +10,12 @@ let transporter=nodemailer.createTransport({
     secure:false,
     auth:{
         user:'taranpreet4554@gmail.com',
-        pass:'%%$%'
+        pass:'##$$##'
     }
 });
 
 // tells mailer that we are using ejs
-let renderTemplate=(data,relativPath) => {
+let renderTemplate=(data,relativePath) => {
     let mailHTML;
     ejs.renderFile(
            path.join(__dirname,'../views/mailers',relativePath),
