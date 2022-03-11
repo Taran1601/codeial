@@ -16,5 +16,13 @@ module.exports.chatSockets=function(socketServer){
         socket.on('disconnect',function(){
             console.log('socket disconnected');
         });
+        // .on detects the event emiited by the user
+ socket.on('_join_room',function(data){
+     console.log('joining request received',data);
+ //user will be connected to the chat room if connection has been established
+            socket.join(data.chatroom);
+ //emitting the notification to other users that the new user has joined the chat room
+            io.in(data.chatroom).emit('user_joined',data);
+        })
     });
 }
